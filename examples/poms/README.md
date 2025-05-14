@@ -8,18 +8,20 @@ This directory contains all the Maven POM files required to migrate the CQSS pro
 
 ## Module POMs
 
-- [cqss-common/pom.xml](cqss-common/pom.xml) - Common utilities and shared classes
-- [cqss-startup/pom.xml](cqss-startup/pom.xml) - Application startup module
-- [cqss-vo/pom.xml](cqss-vo/pom.xml) - Value Objects (VOs)
-- [cqss-db/pom.xml](cqss-db/pom.xml) - Database access layer
-- [cqss-ejb-util/pom.xml](cqss-ejb-util/pom.xml) - EJB utilities
-- [cqss-intra-ejb/pom.xml](cqss-intra-ejb/pom.xml) - Intranet EJB module
-- [cqss-intranet-web/pom.xml](cqss-intranet-web/pom.xml) - Intranet web application
-- [cqss-applet/pom.xml](cqss-applet/pom.xml) - Java applet module
-- [cqss-batch-job-db/pom.xml](cqss-batch-job-db/pom.xml) - Batch job database module
-- [cqss-security-admin/pom.xml](cqss-security-admin/pom.xml) - Security administration module
-- [cqss-svr/pom.xml](cqss-svr/pom.xml) - Server module
-- [cqss-ear/pom.xml](cqss-ear/pom.xml) - EAR packaging module for deployment
+- [CqssCommon/pom.xml](CqssCommon/pom.xml) - Common utilities and shared classes
+- [CqssStartup/pom.xml](CqssStartup/pom.xml) - Application startup module
+- [CqssVo/pom.xml](CqssVo/pom.xml) - Value Objects (VOs)
+- [CqssDB/pom.xml](CqssDB/pom.xml) - Database access layer
+- [CqssEjbUtil/pom.xml](CqssEjbUtil/pom.xml) - EJB utilities
+- [CqssIntraEjb/pom.xml](CqssIntraEjb/pom.xml) - Intranet EJB module
+- [CqssIntranetWeb/pom.xml](CqssIntranetWeb/pom.xml) - Intranet web application
+- [CqssApplet/pom.xml](CqssApplet/pom.xml) - Java applet module
+- [CqssBatchJobDB/pom.xml](CqssBatchJobDB/pom.xml) - Batch job database module
+- [CqssSecurityAdmin/pom.xml](CqssSecurityAdmin/pom.xml) - Security administration module
+- [CqssSvr/pom.xml](CqssSvr/pom.xml) - Server module
+- [CqssEjbTestClient/pom.xml](CqssEjbTestClient/pom.xml) - EJB test client
+- [CqssIntraEAR/pom.xml](CqssIntraEAR/pom.xml) - EAR packaging module for deployment
+- [Ibator/pom.xml](Ibator/pom.xml) - iBATIS code generator module
 
 ## Usage
 
