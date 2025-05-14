@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.cqss</groupId>
+        <artifactId>cqss-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>cqss-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <dependencies>
+        <!-- Web Modules -->
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-intranet-web</artifactId>
+            <type>war</type>
+        </dependency>
+        
+        <!-- EJB Modules -->
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-intra-ejb</artifactId>
+            <type>ejb</type>
+        </dependency>
+        
+        <!-- Supporting JAR Modules -->
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-ejb-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-vo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-db</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-common</artifactId>
+        </dependency>
+        
+        <!-- WNB Core Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-msg</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-util</artifactId>
+        </dependency>
+        
+        <!-- CyberUtil Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-common-for-was</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-tools-for-was</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-for-was</artifactId>
+        </dependency>
+        
+        <!-- WebSphere Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>ejb-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>wnb-log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>ejb-intra-common-scs</artifactId>
+        </dependency>
+        
+        <!-- Apache Commons Libraries -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-chain</groupId>
+            <artifactId>commons-chain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging-adapters</groupId>
+            <artifactId>commons-logging-adapters</artifactId>
+            <version>${commons.logging.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging-api</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>${commons.logging.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        
+        <!-- Logging Dependencies -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        
+        <!-- Spring and Related -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring</artifactId>
+        </dependency>
+        
+        <!-- HSM Common -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>hsm-common</artifactId>
+        </dependency>
+        
+        <!-- Aspect Libraries -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        
+        <!-- ANTLR -->
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+        </dependency>
+        
+        <!-- iBatis -->
+        <dependency>
+            <groupId>org.apache.ibatis</groupId>
+            <artifactId>ibatis</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <version>7</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <applicationXml>${basedir}/src/main/application/META-INF/application.xml</applicationXml>
+                    <modules>
+                        <webModule>
+                            <groupId>com.cqss</groupId>
+                            <artifactId>cqss-intranet-web</artifactId>
+                            <contextRoot>/cqss</contextRoot>
+                        </webModule>
+                        <ejbModule>
+                            <groupId>com.cqss</groupId>
+                            <artifactId>cqss-intra-ejb</artifactId>
+                        </ejbModule>
+                    </modules>
+                    <displayName>CqssIntra</displayName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
