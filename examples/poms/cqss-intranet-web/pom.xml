@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.cqss</groupId>
+        <artifactId>cqss-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>cqss-intranet-web</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <!-- CQSS Module Dependencies -->
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-applet</artifactId>
+        </dependency>
+        
+        <!-- WNB Core Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-msg</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>app-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>ejb-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>ejb-intra-web-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>ejb-web-common</artifactId>
+        </dependency>
+        
+        <!-- CyberUtil Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-common-for-was</artifactId>
+        </dependency>
+        
+        <!-- Struts and Related -->
+        <dependency>
+            <groupId>struts</groupId>
+            <artifactId>struts</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta-oro</groupId>
+            <artifactId>jakarta-oro</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        
+        <!-- Apache Commons Libraries -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+        
+        <!-- WebSphere API -->
+        <dependency>
+            <groupId>com.ibm.websphere</groupId>
+            <artifactId>websphere-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <directory>${project.basedir}/src/main/webapp</directory>
+                        </resource>
+                    </webResources>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Title>com.ocbc.hk.apps.cqss</Implementation-Title>
+                            <Implementation-Version>1.0</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
