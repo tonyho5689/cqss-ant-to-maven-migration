@@ -10,18 +10,20 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cqss-common</module>
-        <module>cqss-startup</module>
-        <module>cqss-vo</module>
-        <module>cqss-db</module>
-        <module>cqss-ejb-util</module>
-        <module>cqss-intra-ejb</module>
-        <module>cqss-intranet-web</module>
-        <module>cqss-applet</module>
-        <module>cqss-batch-job-db</module>
-        <module>cqss-security-admin</module>
-        <module>cqss-svr</module>
-        <module>cqss-ear</module>
+        <module>CqssCommon</module>
+        <module>CqssStartup</module>
+        <module>CqssVo</module>
+        <module>CqssDB</module>
+        <module>CqssEjbUtil</module>
+        <module>CqssIntraEjb</module>
+        <module>CqssIntranetWeb</module>
+        <module>CqssApplet</module>
+        <module>CqssBatchJobDB</module>
+        <module>CqssSecurityAdmin</module>
+        <module>CqssSvr</module>
+        <module>CqssEjbTestClient</module>
+        <module>CqssIntraEAR</module>
+        <module>Ibator</module>
     </modules>
 
     <properties>
@@ -84,64 +86,74 @@
             <!-- Internal Modules -->
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-common</artifactId>
+                <artifactId>CqssCommon</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-startup</artifactId>
+                <artifactId>CqssStartup</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-vo</artifactId>
+                <artifactId>CqssVo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-db</artifactId>
+                <artifactId>CqssDB</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-ejb-util</artifactId>
+                <artifactId>CqssEjbUtil</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-intra-ejb</artifactId>
+                <artifactId>CqssIntraEjb</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-intranet-web</artifactId>
+                <artifactId>CqssIntranetWeb</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-applet</artifactId>
+                <artifactId>CqssApplet</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-batch-job-db</artifactId>
+                <artifactId>CqssBatchJobDB</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-security-admin</artifactId>
+                <artifactId>CqssSecurityAdmin</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-svr</artifactId>
+                <artifactId>CqssSvr</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.cqss</groupId>
-                <artifactId>cqss-ear</artifactId>
+                <artifactId>CqssEjbTestClient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cqss</groupId>
+                <artifactId>CqssIntraEAR</artifactId>
                 <version>${project.version}</version>
                 <type>ear</type>
+            </dependency>
+            <dependency>
+                <groupId>com.cqss</groupId>
+                <artifactId>Ibator</artifactId>
+                <version>${project.version}</version>
             </dependency>
             
             <!-- Apache Commons Dependencies -->
