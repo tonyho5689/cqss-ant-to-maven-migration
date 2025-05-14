@@ -1,118 +1,208 @@
 #!/bin/bash
+# Script to reorganize source files from Ant structure to Maven structure
 
-# Script to reorganize the CQSS project files from Ant to Maven structure
-# This script assumes you're running it from the project root directory
+set -e  # Exit on error
 
-# Create the basic Maven project structure
-mkdir -p cqss-parent
-mkdir -p cqss-common/src/main/java
-mkdir -p cqss-common/src/main/resources
-mkdir -p cqss-startup/src/main/java
-mkdir -p cqss-startup/src/main/resources
-mkdir -p cqss-vo/src/main/java
-mkdir -p cqss-vo/src/main/resources
-mkdir -p cqss-db/src/main/java
-mkdir -p cqss-db/src/main/resources
-mkdir -p cqss-ejb-util/src/main/java
-mkdir -p cqss-ejb-util/src/main/resources
-mkdir -p cqss-intra-ejb/src/main/java
-mkdir -p cqss-intra-ejb/src/main/resources
-mkdir -p cqss-intranet-web/src/main/java
-mkdir -p cqss-intranet-web/src/main/resources
-mkdir -p cqss-intranet-web/src/main/webapp/WEB-INF
-mkdir -p cqss-applet/src/main/java
-mkdir -p cqss-applet/src/main/resources
-mkdir -p cqss-batch-job-db/src/main/java
-mkdir -p cqss-batch-job-db/src/main/resources
-mkdir -p cqss-security-admin/src/main/java
-mkdir -p cqss-security-admin/src/main/resources
-mkdir -p cqss-svr/src/main/java
-mkdir -p cqss-svr/src/main/resources
-mkdir -p cqss-ear/src/main/application
+# Source and destination directories
+SOURCE_BASE="../"
+MAVEN_BASE="."
 
-echo "Created basic Maven directory structure"
-
-# Function to copy Java files and non-Java resources to Maven structure
-copy_module_files() {
-    MODULE_NAME=$1
-    MAVEN_MODULE=$2
+# Function to create Maven directories
+create_maven_dirs() {
+    local MODULE=$1
+    mkdir -p $MAVEN_BASE/$MODULE/src/main/java
+    mkdir -p $MAVEN_BASE/$MODULE/src/main/resources
+    mkdir -p $MAVEN_BASE/$MODULE/src/test/java
+    mkdir -p $MAVEN_BASE/$MODULE/src/test/resources
     
-    echo "Processing module ${MODULE_NAME} -> ${MAVEN_MODULE}"
-    
-    # Copy Java source files
-    if [ -d "Source/${MODULE_NAME}/src" ]; then
-        find "Source/${MODULE_NAME}/src" -name "*.java" -exec cp --parents {} "${MAVEN_MODULE}/src/main/java/" \;
-        echo "  Copied Java files from Source/${MODULE_NAME}/src to ${MAVEN_MODULE}/src/main/java/"
-    elif [ -d "Source/${MODULE_NAME}/ejbModule" ]; then
-        find "Source/${MODULE_NAME}/ejbModule" -name "*.java" -exec cp --parents {} "${MAVEN_MODULE}/src/main/java/" \;
-        echo "  Copied Java files from Source/${MODULE_NAME}/ejbModule to ${MAVEN_MODULE}/src/main/java/"
-    fi
-    
-    # Copy resource files (properties, xml, etc.)
-    if [ -d "Source/${MODULE_NAME}/src" ]; then
-        find "Source/${MODULE_NAME}/src" -name "*.properties" -o -name "*.xml" -o -name "*.txt" -o -name "*.config" -o -name "*.MF" \
-        | grep -v ".java$" | xargs -I{} cp --parents {} "${MAVEN_MODULE}/src/main/resources/"
-        echo "  Copied resource files from Source/${MODULE_NAME}/src to ${MAVEN_MODULE}/src/main/resources/"
-    elif [ -d "Source/${MODULE_NAME}/ejbModule" ]; then
-        find "Source/${MODULE_NAME}/ejbModule" -name "*.properties" -o -name "*.xml" -o -name "*.txt" -o -name "*.config" -o -name "*.MF" \
-        | grep -v ".java$" | xargs -I{} cp --parents {} "${MAVEN_MODULE}/src/main/resources/"
-        echo "  Copied resource files from Source/${MODULE_NAME}/ejbModule to ${MAVEN_MODULE}/src/main/resources/"
-    fi
-    
-    # For Web module, copy web content
-    if [ "${MODULE_NAME}" = "CqssIntranetWeb" ]; then
-        if [ -d "Source/${MODULE_NAME}/WebContent" ]; then
-            cp -r "Source/${MODULE_NAME}/WebContent/"* "${MAVEN_MODULE}/src/main/webapp/"
-            # Move web.xml to WEB-INF
-            mkdir -p "${MAVEN_MODULE}/src/main/webapp/WEB-INF"
-            if [ -f "Source/${MODULE_NAME}/WebContent/Web-inf/web.xml" ]; then
-                cp "Source/${MODULE_NAME}/WebContent/Web-inf/web.xml" "${MAVEN_MODULE}/src/main/webapp/WEB-INF/"
-            fi
-            echo "  Copied web content from Source/${MODULE_NAME}/WebContent to ${MAVEN_MODULE}/src/main/webapp/"
-        fi
-    fi
-    
-    # For EAR module, copy application.xml
-    if [ "${MODULE_NAME}" = "CqssIntraEAR" ]; then
-        if [ -d "Source/${MODULE_NAME}/meta-inf" ]; then
-            mkdir -p "${MAVEN_MODULE}/src/main/application/META-INF"
-            cp "Source/${MODULE_NAME}/meta-inf/application.xml" "${MAVEN_MODULE}/src/main/application/META-INF/"
-            echo "  Copied application.xml from Source/${MODULE_NAME}/meta-inf to ${MAVEN_MODULE}/src/main/application/META-INF/"
-        fi
+    # Create webapp directory for web modules
+    if [[ "$MODULE" == "CqssIntranetWeb" ]]; then
+        mkdir -p $MAVEN_BASE/$MODULE/src/main/webapp
     fi
 }
 
-# Copy each module's files to the Maven structure
-copy_module_files "CqssCommon" "cqss-common"
-copy_module_files "CqssStartup" "cqss-startup"
-copy_module_files "CqssVo" "cqss-vo"
-copy_module_files "CqssDB" "cqss-db"
-copy_module_files "CqssEjbUtil" "cqss-ejb-util"
-copy_module_files "CqssIntraEjb" "cqss-intra-ejb"
-copy_module_files "CqssIntranetWeb" "cqss-intranet-web"
-copy_module_files "CqssApplet" "cqss-applet"
-copy_module_files "CqssBatchJobDB" "cqss-batch-job-db"
-copy_module_files "CqssSecurityAdmin" "cqss-security-admin"
-copy_module_files "CqssSvr" "cqss-svr"
-copy_module_files "CqssIntraEAR" "cqss-ear"
+# Function to copy Java files
+copy_java_files() {
+    local MODULE=$1
+    local SRC_DIR=$2
+    local DEST_DIR=$MAVEN_BASE/$MODULE/src/main/java
+    
+    echo "Copying Java files from $SRC_DIR to $DEST_DIR"
+    
+    # Find all Java files and copy them, preserving directory structure
+    find $SRC_DIR -name "*.java" -type f | while read file; do
+        # Get relative path from source directory
+        rel_path=${file#$SRC_DIR/}
+        dest_file=$DEST_DIR/$rel_path
+        mkdir -p $(dirname $dest_file)
+        cp $file $dest_file
+    done
+}
 
-echo "Finished copying module files to Maven structure"
-echo "Please review the files and adjust package names if necessary"
+# Function to copy resource files
+copy_resource_files() {
+    local MODULE=$1
+    local SRC_DIR=$2
+    local DEST_DIR=$MAVEN_BASE/$MODULE/src/main/resources
+    
+    echo "Copying resource files from $SRC_DIR to $DEST_DIR"
+    
+    # Find all non-Java files except specific exclusions and copy them
+    find $SRC_DIR -type f \( -not -name "*.java" -and -not -name "*.contrib" -and -not -name "*.keep" \
+        -and -not -name "*.mkelem" -and -not -name "*.checkout" -and -not -name "*.unloaded" \
+        -and -not -name "vssver.scc" \) | while read file; do
+        # Get relative path from source directory
+        rel_path=${file#$SRC_DIR/}
+        dest_file=$DEST_DIR/$rel_path
+        mkdir -p $(dirname $dest_file)
+        cp $file $dest_file
+    done
+}
 
-# Now copy the POM files (these would be created separately)
-cp pom.xml ./
-cp cqss-common-pom.xml cqss-common/pom.xml
-cp cqss-startup-pom.xml cqss-startup/pom.xml
-cp cqss-vo-pom.xml cqss-vo/pom.xml
-cp cqss-db-pom.xml cqss-db/pom.xml
-cp cqss-ejb-util-pom.xml cqss-ejb-util/pom.xml
-cp cqss-intra-ejb-pom.xml cqss-intra-ejb/pom.xml
-cp cqss-intranet-web-pom.xml cqss-intranet-web/pom.xml
-cp cqss-applet-pom.xml cqss-applet/pom.xml
-cp cqss-batch-job-db-pom.xml cqss-batch-job-db/pom.xml
-cp cqss-security-admin-pom.xml cqss-security-admin/pom.xml
-cp cqss-svr-pom.xml cqss-svr/pom.xml
-cp cqss-ear-pom.xml cqss-ear/pom.xml
+# Function to copy web content
+copy_web_content() {
+    local SRC_DIR=$1
+    local DEST_DIR=$MAVEN_BASE/CqssIntranetWeb/src/main/webapp
+    
+    echo "Copying web content from $SRC_DIR to $DEST_DIR"
+    
+    # Find all web content files except specific exclusions and copy them
+    find $SRC_DIR -type f \( -not -name "*.class" -and -not -name "*.contrib" -and -not -name "*.keep" \
+        -and -not -name "*.mkelem" -and -not -name "*.checkout" -and -not -name "*.unloaded" \
+        -and -not -name "vssver.scc" \) | while read file; do
+        # Get relative path from source directory
+        rel_path=${file#$SRC_DIR/}
+        dest_file=$DEST_DIR/$rel_path
+        mkdir -p $(dirname $dest_file)
+        cp $file $dest_file
+    done
+    
+    # Special handling for web.xml
+    if [ -f "$SRC_DIR/Web-inf/web.xml" ]; then
+        mkdir -p $DEST_DIR/WEB-INF
+        cp $SRC_DIR/Web-inf/web.xml $DEST_DIR/WEB-INF/web.xml
+    fi
+}
 
-echo "Copied POM files to each module"
-echo "Source code reorganization complete"
+# Function to copy EAR content
+copy_ear_content() {
+    local SRC_DIR=$1
+    local DEST_DIR=$MAVEN_BASE/CqssIntraEAR/src/main/application
+    
+    echo "Copying EAR content from $SRC_DIR to $DEST_DIR"
+    
+    # Create destination directory
+    mkdir -p $DEST_DIR/META-INF
+    
+    # Copy application.xml
+    if [ -f "$SRC_DIR/meta-inf/application.xml" ]; then
+        cp $SRC_DIR/meta-inf/application.xml $DEST_DIR/META-INF/application.xml
+    fi
+}
+
+# Main script
+echo "===== Reorganizing source files from Ant to Maven structure ====="
+
+# Process CqssCommon
+MODULE="CqssCommon"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssCommon/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssCommon/src
+
+# Process CqssStartup
+MODULE="CqssStartup"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssStartup/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssStartup/src
+
+# Process CqssVo
+MODULE="CqssVo"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssVo/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssVo/src
+
+# Process CqssDB
+MODULE="CqssDB"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssDB/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssDB/src
+
+# Process CqssEjbUtil
+MODULE="CqssEjbUtil"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssEjbUtil/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssEjbUtil/src
+
+# Process CqssIntraEjb
+MODULE="CqssIntraEjb"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssIntraEjb/ejbModule
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssIntraEjb/ejbModule
+
+# Process CqssIntranetWeb
+MODULE="CqssIntranetWeb"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssIntranetWeb/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssIntranetWeb/src
+copy_web_content $SOURCE_BASE/Source/CqssIntranetWeb/WebContent $MAVEN_BASE/CqssIntranetWeb/src/main/webapp
+
+# Process CqssApplet
+MODULE="CqssApplet"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssApplet/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssApplet/src
+
+# Process CqssBatchJobDB
+MODULE="CqssBatchJobDB"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssBatchJobDB/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssBatchJobDB/src
+
+# Process CqssSecurityAdmin
+MODULE="CqssSecurityAdmin"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssSecurityAdmin/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssSecurityAdmin/src
+
+# Process CqssSvr
+MODULE="CqssSvr"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_java_files $MODULE $SOURCE_BASE/Source/CqssSvr/src
+copy_resource_files $MODULE $SOURCE_BASE/Source/CqssSvr/src
+
+# Process CqssEjbTestClient (if exists)
+if [ -d "$SOURCE_BASE/Source/CqssEjbTestClient" ]; then
+    MODULE="CqssEjbTestClient"
+    echo "Processing $MODULE..."
+    create_maven_dirs $MODULE
+    copy_java_files $MODULE $SOURCE_BASE/Source/CqssEjbTestClient/src
+    copy_resource_files $MODULE $SOURCE_BASE/Source/CqssEjbTestClient/src
+fi
+
+# Process Ibator (if exists)
+if [ -d "$SOURCE_BASE/Source/Ibator" ]; then
+    MODULE="Ibator"
+    echo "Processing $MODULE..."
+    create_maven_dirs $MODULE
+    copy_java_files $MODULE $SOURCE_BASE/Source/Ibator/src
+    copy_resource_files $MODULE $SOURCE_BASE/Source/Ibator/src
+fi
+
+# Process CqssIntraEAR
+MODULE="CqssIntraEAR"
+echo "Processing $MODULE..."
+create_maven_dirs $MODULE
+copy_ear_content $SOURCE_BASE/Source/CqssIntraEAR
+
+echo "===== Source reorganization completed successfully! ====="
