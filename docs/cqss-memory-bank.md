@@ -23,43 +23,43 @@ Ibator
 
 ## Maven Project Structure
 
-The Maven project structure is designed to maintain proper alignment with the original Ant modules:
+The Maven project structure uses the exact same naming convention as the original Ant modules:
 
 ```
 cqss/
-├── pom.xml                   # Parent POM
-├── cqss-applet/              # Maps to CqssApplet
-├── cqss-batch-job-db/        # Maps to CqssBatchJobDB
-├── cqss-common/              # Maps to CqssCommon
-├── cqss-db/                  # Maps to CqssDB
-├── cqss-ejb-test-client/     # Maps to CqssEjbTestClient
-├── cqss-ejb-util/            # Maps to CqssEjbUtil
-├── cqss-intraejb/            # Maps to CqssIntraEjb (no hyphen between intra and ejb)
-├── cqss-intranet-web/        # Maps to CqssIntranetWeb
-├── cqss-security-admin/      # Maps to CqssSecurityAdmin
-├── cqss-startup/             # Maps to CqssStartup
-├── cqss-svr/                 # Maps to CqssSvr
-├── cqss-vo/                  # Maps to CqssVo
-├── cqss-ear/                 # Maps to CqssIntraEAR
-└── cqss-ibator/              # Maps to Ibator (optional, for iBatis generator)
+├── pom.xml                # Parent POM
+├── CqssApplet/            # Java applet module
+├── CqssBatchJobDB/        # Batch job database module
+├── CqssCommon/            # Common utilities and shared classes
+├── CqssDB/                # Database access layer
+├── CqssEjbTestClient/     # EJB test client module
+├── CqssEjbUtil/           # EJB utility classes
+├── CqssIntraEjb/          # Intranet EJB module
+├── CqssIntranetWeb/       # Intranet web application
+├── CqssSecurityAdmin/     # Security administration module
+├── CqssStartup/           # Application startup module
+├── CqssSvr/               # Server module
+├── CqssVo/                # Value Objects (VO)
+├── CqssIntraEAR/          # EAR packaging module
+└── Ibator/                # iBatis code generator (optional)
 ```
 
 ## Module Dependencies
 
-- **cqss-common**: Depends on logging libraries, WebSphere Core, CyberUtil
-- **cqss-startup**: Depends on logging libraries, WebSphere Core
-- **cqss-vo**: Depends on Apache Commons, WebSphere API
-- **cqss-db**: Depends on cqss-vo, Spring, iBatis
-- **cqss-ejb-util**: Depends on cqss-common, Apache Commons, Spring, CyberUtil
-- **cqss-intraejb**: Depends on multiple CQSS modules, core libraries, Spring
-- **cqss-intranet-web**: Depends on CQSS modules, Struts, WebSphere libraries
-- **cqss-applet**: Depends on JAWS library
-- **cqss-batch-job-db**: Depends on CQSS modules, CyberUtil Batch libraries
-- **cqss-security-admin**: Depends on CyberUtil, database access libraries
-- **cqss-svr**: Depends on CQSS modules, CyberUtil, Spring
-- **cqss-ejb-test-client**: Depends on EJB modules and test frameworks
-- **cqss-ear**: Depends on all modules and libraries for EAR packaging
-- **cqss-ibator**: Configuration for iBatis code generator (if needed)
+- **CqssCommon**: Depends on logging libraries, WebSphere Core, CyberUtil
+- **CqssStartup**: Depends on logging libraries, WebSphere Core
+- **CqssVo**: Depends on Apache Commons, WebSphere API
+- **CqssDB**: Depends on CqssVo, Spring, iBatis
+- **CqssEjbUtil**: Depends on CqssCommon, Apache Commons, Spring, CyberUtil
+- **CqssIntraEjb**: Depends on multiple CQSS modules, core libraries, Spring
+- **CqssIntranetWeb**: Depends on CQSS modules, Struts, WebSphere libraries
+- **CqssApplet**: Depends on JAWS library
+- **CqssBatchJobDB**: Depends on CQSS modules, CyberUtil Batch libraries
+- **CqssSecurityAdmin**: Depends on CyberUtil, database access libraries
+- **CqssSvr**: Depends on CQSS modules, CyberUtil, Spring
+- **CqssEjbTestClient**: Depends on EJB modules and test frameworks
+- **CqssIntraEAR**: Depends on all modules and libraries for EAR packaging
+- **Ibator**: Configuration for iBatis code generator (if needed)
 
 ## Key External Dependencies and Versions
 
@@ -169,5 +169,5 @@ mvn clean install -pl module-name
 mvn clean install -DskipTests
 
 # Build EAR only
-mvn clean install -pl cqss-ear
+mvn clean install -pl CqssIntraEAR
 ```
