@@ -1,0 +1,1 @@
+This file has been removed. Please refer to the consolidated guide at [docs/cqss-migration-guide.md](docs/cqss-migration-guide.md).
