@@ -1,110 +1,137 @@
 #!/bin/bash
+# Script to install all required dependencies into the local Maven repository
 
-# Script to install custom JARs to local Maven repository for the CQSS project
-# This script assumes you're running it from the project root directory
+# Set up local repository path
+REPO_PATH="./cqss-repo/repository"
+mkdir -p $REPO_PATH
 
-# Create local repository directory
-mkdir -p cqss-repo/repository
-echo "Created local repository directory structure"
+# Function to install a JAR file to the local repository
+function install_jar() {
+    local GROUP_ID=$1
+    local ARTIFACT_ID=$2
+    local VERSION=$3
+    local JAR_PATH=$4
+    
+    echo "Installing $GROUP_ID:$ARTIFACT_ID:$VERSION from $JAR_PATH"
+    
+    mvn install:install-file \
+        -Dfile=$JAR_PATH \
+        -DgroupId=$GROUP_ID \
+        -DartifactId=$ARTIFACT_ID \
+        -Dversion=$VERSION \
+        -Dpackaging=jar \
+        -DlocalRepositoryPath=$REPO_PATH
+}
 
-# Define paths
-WAS_LIBS="../../../cbs/cbs/Deploy/Was9/Libraries"
-DEPLOY_LIB="../Deploy/lib"
-BTSS_LIB="../../../btss/btss/Deploy/lib"
-LOCAL_REPO="./cqss-repo/repository"
+echo "===== Installing Custom Libraries ====="
 
+# Install WNB Core libraries
 echo "Installing WNB Core libraries..."
-# WnbCore libraries
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbCore/Core/AppCore.jar" -DgroupId=com.custom -DartifactId=app-core -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbCore/Core/AppMsg.jar" -DgroupId=com.custom -DartifactId=app-msg -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbCore/Core/AppUtil.jar" -DgroupId=com.custom -DartifactId=app-util -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+CORE_LIB_PATH="../../../cbs/cbs/Deploy/Was9/Libraries/WnbCore/Core"
+install_jar "com.custom" "app-core" "1.0" "$CORE_LIB_PATH/AppCore.jar"
+install_jar "com.custom" "app-msg" "1.0" "$CORE_LIB_PATH/AppMsg.jar"
+install_jar "com.custom" "app-util" "1.0" "$CORE_LIB_PATH/AppUtil.jar"
 
-echo "Installing WebSphere libraries..."
-# WebSphere libraries
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/WasCore/EjbCommon.jar" -DgroupId=com.custom -DartifactId=ejb-common -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/WasCore/WnbLog.jar" -DgroupId=com.custom -DartifactId=wnb-log -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/WasCore/EjbIntraWebCommon.jar" -DgroupId=com.custom -DartifactId=ejb-intra-web-common -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/WasCore/EjbWebCommon.jar" -DgroupId=com.custom -DartifactId=ejb-web-common -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/Startup.jar" -DgroupId=com.custom -DartifactId=startup -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install WebSphere Core libraries
+echo "Installing WebSphere Core libraries..."
+WAS_CORE_LIB_PATH="../../../cbs/cbs/Deploy/Was9/Libraries/WnbWas/WasCore"
+install_jar "com.custom" "ejb-common" "1.0" "$WAS_CORE_LIB_PATH/EjbCommon.jar"
+install_jar "com.custom" "wnb-log" "1.0" "$WAS_CORE_LIB_PATH/WnbLog.jar"
+install_jar "com.custom" "ejb-intra-web-common" "1.0" "$WAS_CORE_LIB_PATH/EjbIntraWebCommon.jar"
+install_jar "com.custom" "ejb-web-common" "1.0" "$WAS_CORE_LIB_PATH/EjbWebCommon.jar"
+install_jar "com.custom" "startup" "1.0" "$WAS_CORE_LIB_PATH/Startup.jar"
 
+# Install SCS libraries
 echo "Installing SCS libraries..."
-# SCS libraries
-mvn install:install-file -Dfile="${WAS_LIBS}/WnbWas/Scs/EjbIntraCommonScs.jar" -DgroupId=com.custom -DartifactId=ejb-intra-common-scs -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+SCS_LIB_PATH="../../../cbs/cbs/Deploy/Was9/Libraries/WnbWas/Scs"
+install_jar "com.custom" "ejb-intra-common-scs" "1.0" "$SCS_LIB_PATH/EjbIntraCommonScs.jar"
 
-echo "Installing CyberUtil libraries..."
-# CyberUtil libraries 
-# WebSphere (WAS) versions
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilCommonForWas.jar" -DgroupId=com.custom -DartifactId=cyber-util-common-for-was -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilToolsForWas.jar" -DgroupId=com.custom -DartifactId=cyber-util-tools-for-was -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilForWas.jar" -DgroupId=com.custom -DartifactId=cyber-util-for-was -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install CyberUtil WAS libraries
+echo "Installing CyberUtil WAS libraries..."
+CYBER_UTIL_LIB_PATH="../../../btss/btss/Deploy/lib"
+install_jar "com.custom" "cyber-util-common-for-was" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilCommonForWas.jar"
+install_jar "com.custom" "cyber-util-tools-for-was" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilToolsForWas.jar"
+install_jar "com.custom" "cyber-util-for-was" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilForWas.jar"
 
-# Standalone/Batch versions
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtil.jar" -DgroupId=com.custom -DartifactId=cyber-util -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilCommon.jar" -DgroupId=com.custom -DartifactId=cyber-util-common -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilTools.jar" -DgroupId=com.custom -DartifactId=cyber-util-tools -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilBatch.jar" -DgroupId=com.custom -DartifactId=cyber-util-batch -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilBatchDB.jar" -DgroupId=com.custom -DartifactId=cyber-util-batch-db -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilBatchVo.jar" -DgroupId=com.custom -DartifactId=cyber-util-batch-vo -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${BTSS_LIB}/CyberUtilBatchJob.jar" -DgroupId=com.custom -DartifactId=cyber-util-batch-job -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install CyberUtil Standalone/Batch libraries
+echo "Installing CyberUtil Standalone/Batch libraries..."
+install_jar "com.custom" "cyber-util" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtil.jar"
+install_jar "com.custom" "cyber-util-common" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilCommon.jar"
+install_jar "com.custom" "cyber-util-tools" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilTools.jar"
+install_jar "com.custom" "cyber-util-batch" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilBatch.jar"
+install_jar "com.custom" "cyber-util-batch-db" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilBatchDB.jar"
+install_jar "com.custom" "cyber-util-batch-vo" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilBatchVo.jar"
+install_jar "com.custom" "cyber-util-batch-job" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilBatchJob.jar"
+install_jar "com.custom" "cyber-util-batch-svr" "1.0" "$CYBER_UTIL_LIB_PATH/CyberUtilBatchSvr.jar"
 
-echo "Installing HSM libraries..."
-# HSM libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/hsm/HsmCommon.jar" -DgroupId=com.custom -DartifactId=hsm-common -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install other custom libraries
+echo "Installing other custom libraries..."
+HSM_LIB_PATH="../Deploy/lib/external/hsm"
+install_jar "com.custom" "hsm-common" "1.0" "$HSM_LIB_PATH/HsmCommon.jar"
 
+JAWS_LIB_PATH="../Deploy/lib/external/applet"
+install_jar "jaws" "jaws" "1.0" "$JAWS_LIB_PATH/jaws.jar"
+
+echo "===== Installing External Libraries ====="
+
+# Install Apache Commons libraries
 echo "Installing Apache Commons libraries..."
-# Apache Commons libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-logging-1.1.1.jar" -DgroupId=commons-logging -DartifactId=commons-logging -Dversion=1.1.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-logging-api-1.1.1.jar" -DgroupId=commons-logging -DartifactId=commons-logging-api -Dversion=1.1.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-logging-adapters-1.1.1.jar" -DgroupId=commons-logging -DartifactId=commons-logging-adapters -Dversion=1.1.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-beanutils.jar" -DgroupId=commons-beanutils -DartifactId=commons-beanutils -Dversion=1.8.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-digester-1.8.jar" -DgroupId=commons-digester -DartifactId=commons-digester -Dversion=1.8 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-collections-3.2.1.jar" -DgroupId=commons-collections -DartifactId=commons-collections -Dversion=3.2.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-lang-2.4.jar" -DgroupId=commons-lang -DartifactId=commons-lang -Dversion=2.4 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-codec-1.3.jar" -DgroupId=commons-codec -DartifactId=commons-codec -Dversion=1.3 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-chain-1.2.jar" -DgroupId=commons-chain -DartifactId=commons-chain -Dversion=1.2 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-validator-1.3.1.jar" -DgroupId=commons-validator -DartifactId=commons-validator -Dversion=1.3.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-httpclient-3.1.jar" -DgroupId=commons-httpclient -DartifactId=commons-httpclient -Dversion=3.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/common/commons-configuration-1.5.zip" -DgroupId=commons-configuration -DartifactId=commons-configuration -Dversion=1.5 -Dpackaging=zip -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/apache/logging/log4j.jar" -DgroupId=log4j -DartifactId=log4j -Dversion=1.2.14 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+COMMONS_LIB_PATH="../Deploy/lib/external/apache/common"
+install_jar "commons-logging" "commons-logging" "1.1.1" "$COMMONS_LIB_PATH/commons-logging-1.1.1.jar"
+install_jar "commons-logging" "commons-logging-api" "1.1.1" "$COMMONS_LIB_PATH/commons-logging-api-1.1.1.jar"
+install_jar "commons-logging" "commons-logging-adapters" "1.1.1" "$COMMONS_LIB_PATH/commons-logging-adapters-1.1.1.jar"
+install_jar "commons-beanutils" "commons-beanutils" "1.8.0" "$COMMONS_LIB_PATH/commons-beanutils.jar"
+install_jar "commons-digester" "commons-digester" "1.8" "$COMMONS_LIB_PATH/commons-digester-1.8.jar"
+install_jar "commons-collections" "commons-collections" "3.2.1" "$COMMONS_LIB_PATH/commons-collections-3.2.1.jar"
+install_jar "commons-lang" "commons-lang" "2.4" "$COMMONS_LIB_PATH/commons-lang-2.4.jar"
+install_jar "commons-codec" "commons-codec" "1.3" "$COMMONS_LIB_PATH/commons-codec-1.3.jar"
+install_jar "commons-chain" "commons-chain" "1.2" "$COMMONS_LIB_PATH/commons-chain-1.2.jar"
+install_jar "commons-validator" "commons-validator" "1.3.1" "$COMMONS_LIB_PATH/commons-validator-1.3.1.jar"
+install_jar "commons-httpclient" "commons-httpclient" "3.1" "$COMMONS_LIB_PATH/commons-httpclient-3.1.jar"
+install_jar "commons-configuration" "commons-configuration" "1.5" "$COMMONS_LIB_PATH/commons-configuration-1.5.zip"
 
+# Install Logging libraries
+echo "Installing Logging libraries..."
+LOGGING_LIB_PATH="../Deploy/lib/external/apache/logging"
+install_jar "log4j" "log4j" "1.2.14" "$LOGGING_LIB_PATH/log4j.jar"
+install_jar "org.slf4j" "slf4j-api" "1.6.1" "$LOGGING_LIB_PATH/slf4j-api-1.6.1.jar"
+install_jar "org.slf4j" "slf4j-log4j12" "1.6.1" "$LOGGING_LIB_PATH/slf4j-log4j12-1.6.1.jar"
+
+# Install Spring and related libraries
 echo "Installing Spring and related libraries..."
-# Spring libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/spring/spring-2.5.5.jar" -DgroupId=org.springframework -DartifactId=spring -Dversion=2.5.5 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/spring/aspectj/aspectjrt.jar" -DgroupId=org.aspectj -DartifactId=aspectjrt -Dversion=1.6.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/spring/aspectj/aspectjweaver.jar" -DgroupId=org.aspectj -DartifactId=aspectjweaver -Dversion=1.6.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/spring/antlr/antlr-2.7.6.jar" -DgroupId=antlr -DartifactId=antlr -Dversion=2.7.6 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+SPRING_LIB_PATH="../Deploy/lib/external/spring"
+install_jar "org.springframework" "spring" "2.5.5" "$SPRING_LIB_PATH/spring-2.5.5.jar"
+install_jar "org.aspectj" "aspectjrt" "1.6.1" "$SPRING_LIB_PATH/aspectj/aspectjrt.jar"
+install_jar "org.aspectj" "aspectjweaver" "1.6.1" "$SPRING_LIB_PATH/aspectj/aspectjweaver.jar"
+install_jar "antlr" "antlr" "2.7.6" "$SPRING_LIB_PATH/antlr/antlr-2.7.6.jar"
 
-echo "Installing Database libraries..."
-# Database libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/db/ojdbc8.jar" -DgroupId=com.oracle -DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/db/c3p0-0.9.2.1.jar" -DgroupId=com.mchange -DartifactId=c3p0 -Dversion=0.9.2.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/db/mchange-commons-java-0.2.3.4.jar" -DgroupId=com.mchange -DartifactId=mchange-commons-java -Dversion=0.2.3.4 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install Database and ORM libraries
+echo "Installing Database and ORM libraries..."
+IBATIS_LIB_PATH="../Deploy/lib/external/ibatis"
+install_jar "org.apache.ibatis" "ibatis" "2.3.0.677" "$IBATIS_LIB_PATH/ibatis-2.3.0.677_cv.jar"
 
-echo "Installing iBatis library..."
-# iBatis library
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/ibatis/ibatis-2.3.0.677_cv.jar" -DgroupId=org.apache.ibatis -DartifactId=ibatis -Dversion=2.3.0.677 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+DB_LIB_PATH="../Deploy/lib/external/db"
+install_jar "com.oracle" "ojdbc8" "12.2.0.1" "$DB_LIB_PATH/ojdbc8.jar"
+install_jar "com.mchange" "c3p0" "0.9.2.1" "$DB_LIB_PATH/c3p0-0.9.2.1.jar"
+install_jar "com.mchange" "mchange-commons-java" "0.2.3.4" "$DB_LIB_PATH/mchange-commons-java-0.2.3.4.jar"
 
-echo "Installing SLF4J libraries..."
-# SLF4J libraries
-mvn install:install-file -Dfile="${WAS_LIBS}/other/slf4j-api-1.6.1.jar" -DgroupId=org.slf4j -DartifactId=slf4j-api -Dversion=1.6.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${WAS_LIBS}/other/slf4j-log4j12-1.6.1.jar" -DgroupId=org.slf4j -DartifactId=slf4j-log4j12 -Dversion=1.6.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-
+# Install Struts and related libraries
 echo "Installing Struts and related libraries..."
-# Struts libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/struts/struts.jar" -DgroupId=struts -DartifactId=struts -Dversion=1.2.9 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/struts/jakarta-oro.jar" -DgroupId=jakarta-oro -DartifactId=jakarta-oro -Dversion=2.0.8 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+STRUTS_LIB_PATH="../Deploy/lib/external/struts"
+install_jar "struts" "struts" "1.2.9" "$STRUTS_LIB_PATH/struts.jar"
+install_jar "jakarta-oro" "jakarta-oro" "2.0.8" "$STRUTS_LIB_PATH/jakarta-oro.jar"
 
+# Install JAXB libraries
 echo "Installing JAXB libraries..."
-# JAXB libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/jaxb/jaxb-api.jar" -DgroupId=javax.xml.bind -DartifactId=jaxb-api -Dversion=2.3.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/jaxb/jaxb-impl.jar" -DgroupId=com.sun.xml.bind -DartifactId=jaxb-impl -Dversion=2.3.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/jaxb/jsr173_1.0_api.jar" -DgroupId=javax.xml -DartifactId=jsr173 -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/jaxb/activation.jar" -DgroupId=javax.activation -DartifactId=activation -Dversion=1.1.1 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+JAXB_LIB_PATH="../Deploy/lib/external/jaxb"
+install_jar "javax.xml.bind" "jaxb-api" "2.3.0" "$JAXB_LIB_PATH/jaxb-api.jar"
+install_jar "com.sun.xml.bind" "jaxb-impl" "2.3.0" "$JAXB_LIB_PATH/jaxb-impl.jar"
+install_jar "javax.xml" "jsr173" "1.0" "$JAXB_LIB_PATH/jsr173.jar"
+install_jar "javax.activation" "activation" "1.1.1" "$JAXB_LIB_PATH/activation.jar"
 
-echo "Installing miscellaneous libraries..."
-# Misc libraries
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/jsch/jsch-0.1.54.jar" -DgroupId=com.jcraft -DartifactId=jsch -Dversion=0.1.54 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
-mvn install:install-file -Dfile="${DEPLOY_LIB}/external/applet/jaws.jar" -DgroupId=jaws -DartifactId=jaws -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath="${LOCAL_REPO}"
+# Install other third-party libraries
+echo "Installing other third-party libraries..."
+JSCH_LIB_PATH="../Deploy/lib/external/jsch"
+install_jar "com.jcraft" "jsch" "0.1.54" "$JSCH_LIB_PATH/jsch-0.1.54.jar"
 
-echo "All libraries installed successfully to local repository: ${LOCAL_REPO}"
-echo "You can now build the CQSS project with Maven."
+echo "===== All dependencies installed successfully! ====="
