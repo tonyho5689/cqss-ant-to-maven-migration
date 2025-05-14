@@ -2,23 +2,46 @@
 
 This document serves as a reference for key information about the CQSS project and its migration from Ant to Maven.
 
-## Project Structure
+## Original Ant Project Structure
+
+```
+CqssApplet
+CqssBatchJobDB
+CqssCommon
+CqssDB
+CqssEjbTestClient
+CqssEjbUtil
+CqssIntraEAR
+CqssIntraEjb
+CqssIntranetWeb
+CqssSecurityAdmin
+CqssStartup
+CqssSvr
+CqssVo
+Ibator
+```
+
+## Maven Project Structure
+
+The Maven project structure is designed to maintain proper alignment with the original Ant modules:
 
 ```
 cqss/
-├── pom.xml                 # Parent POM
-├── cqss-common/            # Common utilities and shared classes
-├── cqss-startup/           # Application startup module
-├── cqss-vo/                # Value Objects (VO)
-├── cqss-db/                # Database access layer
-├── cqss-ejb-util/          # EJB utility classes
-├── cqss-intra-ejb/         # Intranet EJB module
-├── cqss-intranet-web/      # Intranet web application
-├── cqss-applet/            # Java applet module
-├── cqss-batch-job-db/      # Batch job database module
-├── cqss-security-admin/    # Security administration module
-├── cqss-svr/               # Server module
-└── cqss-ear/               # EAR packaging module
+├── pom.xml                   # Parent POM
+├── cqss-applet/              # Maps to CqssApplet
+├── cqss-batch-job-db/        # Maps to CqssBatchJobDB
+├── cqss-common/              # Maps to CqssCommon
+├── cqss-db/                  # Maps to CqssDB
+├── cqss-ejb-test-client/     # Maps to CqssEjbTestClient
+├── cqss-ejb-util/            # Maps to CqssEjbUtil
+├── cqss-intraejb/            # Maps to CqssIntraEjb (no hyphen between intra and ejb)
+├── cqss-intranet-web/        # Maps to CqssIntranetWeb
+├── cqss-security-admin/      # Maps to CqssSecurityAdmin
+├── cqss-startup/             # Maps to CqssStartup
+├── cqss-svr/                 # Maps to CqssSvr
+├── cqss-vo/                  # Maps to CqssVo
+├── cqss-ear/                 # Maps to CqssIntraEAR
+└── cqss-ibator/              # Maps to Ibator (optional, for iBatis generator)
 ```
 
 ## Module Dependencies
@@ -28,13 +51,15 @@ cqss/
 - **cqss-vo**: Depends on Apache Commons, WebSphere API
 - **cqss-db**: Depends on cqss-vo, Spring, iBatis
 - **cqss-ejb-util**: Depends on cqss-common, Apache Commons, Spring, CyberUtil
-- **cqss-intra-ejb**: Depends on multiple CQSS modules, core libraries, Spring
+- **cqss-intraejb**: Depends on multiple CQSS modules, core libraries, Spring
 - **cqss-intranet-web**: Depends on CQSS modules, Struts, WebSphere libraries
 - **cqss-applet**: Depends on JAWS library
 - **cqss-batch-job-db**: Depends on CQSS modules, CyberUtil Batch libraries
 - **cqss-security-admin**: Depends on CyberUtil, database access libraries
 - **cqss-svr**: Depends on CQSS modules, CyberUtil, Spring
+- **cqss-ejb-test-client**: Depends on EJB modules and test frameworks
 - **cqss-ear**: Depends on all modules and libraries for EAR packaging
+- **cqss-ibator**: Configuration for iBatis code generator (if needed)
 
 ## Key External Dependencies and Versions
 
