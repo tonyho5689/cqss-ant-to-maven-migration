@@ -10,22 +10,22 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>cqss-intra-ejb</artifactId>
+    <artifactId>CqssIntraEjb</artifactId>
     <packaging>ejb</packaging>
 
     <dependencies>
         <!-- CQSS Module Dependencies -->
         <dependency>
             <groupId>com.cqss</groupId>
-            <artifactId>cqss-ejb-util</artifactId>
+            <artifactId>CqssEjbUtil</artifactId>
         </dependency>
         <dependency>
             <groupId>com.cqss</groupId>
-            <artifactId>cqss-db</artifactId>
+            <artifactId>CqssDB</artifactId>
         </dependency>
         <dependency>
             <groupId>com.cqss</groupId>
-            <artifactId>cqss-vo</artifactId>
+            <artifactId>CqssVo</artifactId>
         </dependency>
         
         <!-- WNB Core Libraries -->
