@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.cqss</groupId>
+        <artifactId>cqss-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>cqss-security-admin</artifactId>
+
+    <dependencies>
+        <!-- CyberUtil Libraries -->
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.custom</groupId>
+            <artifactId>cyber-util-tools</artifactId>
+        </dependency>
+        
+        <!-- CQSS Modules -->
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-vo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cqss</groupId>
+            <artifactId>cqss-db</artifactId>
+        </dependency>
+        
+        <!-- Database Dependencies -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ibatis</groupId>
+            <artifactId>ibatis</artifactId>
+        </dependency>
+        
+        <!-- Apache Commons Libraries -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        
+        <!-- Logging Dependencies -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Title>com.ocbc.hk.apps.cqss</Implementation-Title>
+                            <Implementation-Version>1.0</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
